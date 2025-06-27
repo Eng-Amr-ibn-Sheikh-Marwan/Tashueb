@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تسجيل بيانات الطلاب</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+            --highlight-color: #f6c23e;
+            --text-color: #5a5c69;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fc;
+            color: var(--text-color);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 10px 15px;
+            border: 1px solid #d1d3e2;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+        
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table th {
+            border: none;
+            font-weight: 600;
+        }
+        
+        .table td {
+            vertical-align: middle;
+        }
+        
+        .highlight-row {
+            background-color: ;
+            position: relative;
+        }
+        
+        .highlight-row::after {
+            content: "أنت";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .rank-cell {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .gpa-cell {
+            font-weight: bold;
+        }
+
+        .offline-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .table-responsive {
+                border-radius: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header py-3 bg-white">
+                  
+                        <h4 class="m-0 font-weight-bold text-primary text-center">
+                            <i class="fas fa-user-graduate me-2"></i>نظام تسجيل بيانات الطلاب
+                        </h4>
+                    </div>
+            
+                    <div class="card-body" id="aa">
+                        <form id="studentForm" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+ 
+                                    <label for="name" class="form-label">الاسم الكامل</label>
+                                    <input type="text" class="form-control" id="name" required>
+                      
+                                    <div class="invalid-feedback">يرجى إدخال الاسم</div>
+                                </div>
+                                
+                   
+                                <div class="col-md-6 mb-3">
+                                    <label for="college" class="form-label">الكلية</label>
+                                    <select class="form-select" id="college" required>
+        
+                                        <option value="" selected disabled>اختر الكلية</option>
+                                        <option value="كلية علوم">كلية علوم</option>
+                     
+                                    </select>
+                                    <div class="invalid-feedback">يرجى اختيار الكلية</div>
+                                </div>
+              
+                            </div>
+                            
+                            <div class="row">
+                             
+                                <div class="col-md-6 mb-3">
+                                    <label for="department" class="form-label">القسم</label>
+                                    <select class="form-select" id="department" required>
+                  
+                                        <option value="" selected disabled>اختر القسم</option>
+                                        <option value="قسم فيزياء اسبيشيال">قسم فيزياء اسبيشيال</option>
+                             
+                                        <option value="قسم كيمياء تطبيقية">قسم كيمياء تطبيقية</option>
+                                    </select>
+                                    <div class="invalid-feedback">يرجى اختيار القسم</div>
+         
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+           
+                                    <label for="grade" class="form-label">الفرقة</label>
+                                    <select class="form-select" id="grade" required>
+                                  
+                                        <option value="" selected disabled>اختر الفرقة</option>
+                                        <option value="الفرقة الثانية">الفرقة الثانية</option>
+                                    </select>
+           
+                                    <div class="invalid-feedback">يرجى اختيار الفرقة</div>
+                                </div>
+                            </div>
+            
+                 
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                     
+                                    <label for="gpa" class="form-label">المعدل التراكمي (GPA)</label>
+                                    <input type="number" class="form-control" id="gpa" min="0" max="4" step="0.01" required>
+                                    <div class="invalid-feedback">يرجى 
+إدخال معدل تراكمي صحيح (0-4)</div>
+                                </div>
+                            </div>
+                            
+        
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                    <i class="fas fa-paper-plane me-2"></i>إرسال البيانات
+  
+                                </button>
+                            </div>
+                        </form>
+                  
+                    </div>
+                </div>
+                
+                <div class="card" id="aa1" style="display:none;">
+                    <div class="card-header py-3 bg-white">
+                        <h4 class="m-0 
+font-weight-bold text-primary text-center">
+                            <i class="fas fa-table me-2"></i>بيانات الطلاب
+                        </h4>
+                    </div>
+                    <div class="card-body">
+ 
+                        <div class="loading-spinner" id="loadingSpinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">جاري التحميل...</span>
+          
+                            </div>
+                            <p class="mt-2">جاري تحميل البيانات...</p>
+                        </div>
+                        
+   
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="studentsTable">
+                                <thead>
+               
+                                    <tr>
+                                        <th width="10%">الترتيب</th>
+                                      
+                                        <th width="10%">التاريخ</th>
+                                        <th width="20%">الاسم</th>
+                                        <th width="10%">الكلية</th>
+               
+                                        <th width="20%">القسم</th>
+                                        <th width="10%">الفرقة</th>
+                                 
+                                        <th width="20%">المعدل</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                        
+                                <tbody>
+                                    </tbody>
+                 
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        // استيراد Supabase بشكل صحيح
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        // تهيئة Supabase
+        const supabaseUrl = 'https://qofzeysprspejcazcjtq.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvZnpleXNwcnNwZWpjYXpjanRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzNjUwMjEsImV4cCI6MjA2NTk0MTAyMX0.COnNcC_jQTSXArv6bBEjjbhRTOktUtlU03qV2K5W6E0';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // العناصر الرئيسية
+        const studentForm = document.getElementById('studentForm');
+        const studentsTable = document.getElementById('studentsTable').getElementsByTagName('tbody')[0];
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const LOCAL_STORAGE_KEY = 'student_data_v4';
+        let currentStudentId = null;
+
+        // دالة مساعدة لتنسيق التاريخ
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+            return `${day}/${month}/${year} ${hours-1}:${minutes}:${seconds}`;
+        }
+
+        // عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('الصفحة جاهزة');
+            await initApp();
+        });
+        // تهيئة التطبيق
+        async function initApp() {
+            try {
+                const hasLocalAndSupabaseData = await checkLocalStorage();
+                if (hasLocalAndSupabaseData) {
+                    studentForm.style.display = 'none';
+                    document.querySelector('.card:last-of-type').style.display = 'block';
+                    await refreshTable();
+                } else {
+                    studentForm.style.display = 'block';
+                    document.querySelector('.card:last-of-type').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('خطأ في التهيئة:', error);
+                showAlert('حدث خطأ أثناء تحميل البيانات', 'danger');
+            }
+        }
+        // التحقق من localStorage
+        async function checkLocalStorage() {
+            const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (!localData) {
+                console.log('لا توجد بيانات محفوظة محليًا');
+                return false;
+            }
+
+            try {
+                const student = JSON.parse(localData);
+                currentStudentId = generateStudentId(student);
+                console.log('تم تحميل البيانات المحلية:', student);
+
+                // التحقق من وجود البيانات في Supabase
+                const { data, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('name', student.name)
+                    .eq('college', student.college)
+                    .eq('department', student.department)
+                    .eq('grade', student.grade)
+                    .eq('gpa', student.gpa);
+                if (error) throw error;
+                
+                if (data.length === 0) {
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                    currentStudentId = null;
+                    console.log('البيانات المحلية غير موجودة في Supabase - تم حذفها');
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('خطأ في التحقق من localStorage:', error);
+                throw error;
+            }
+        }
+
+        // إرسال النموذج
+        studentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('محاولة إرسال النموذج');
+            
+            // التحقق من صحة جميع الحقول
+            if 
+            (!studentForm.checkValidity()) {
+                e.stopPropagation();
+                studentForm.classList.add('was-validated');
+                console.log('التحقق من النموذج فشل');
+                return;
+            }
+
+            const student = {
+     
+                name: document.getElementById('name').value.trim(),
+                college: document.getElementById('college').value,
+                department: document.getElementById('department').value,
+                grade: document.getElementById('grade').value,
+                gpa: parseFloat(document.getElementById('gpa').value),
+            };
+
+            const editingId = studentForm.dataset.editingId;
+
+            try {
+                showLoading(true);
+                if (!validateStudentData(student)) {
+                    throw new Error('بيانات الطالب غير صالحة');
+                }
+
+                let response;
+                if (editingId) {
+                    // Update existing student
+                    console.log('محاولة تحديث البيانات في Supabase...');
+                    response = await supabase
+                        .from('students')
+                        .update(student)
+                        .eq('id', editingId)
+                        .select(); // Ensure the updated record is returned
+                    showAlert('تم تحديث البيانات بنجاح!', 'success');
+                    studentForm.style.display="none";
+                    aa1.style.display="block";
+                } else {
+                    // Insert new student
+                    student.created_at = new Date().toISOString();
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(student));
+                    currentStudentId = generateStudentId(student);
+                    console.log('تم الحفظ المحلي');
+
+                    console.log('محاولة الإرسال إلى Supabase...');
+                    response = await supabase
+                        .from('students')
+                        .insert([student])
+                        .select();
+                    showAlert('تم حفظ البيانات بنجاح!', 'success');
+                }
+
+                if (response.error) {
+                    console.error('خطأ Supabase:', response.error);
+                    throw response.error;
+                }
+
+                console.log('تم العملية بنجاح:', response.data);
+                await refreshTable();
+                studentForm.reset();
+                studentForm.classList.remove('was-validated');
+                
+                // Reset the form button to original state after update
+                const submitButton = studentForm.querySelector('button[type="submit"]');
+                submitButton.innerHTML = '<i class="fas fa-paper-plane me-2"></i>إرسال البيانات';
+                submitButton.classList.remove('btn-info');
+                submitButton.classList.add('btn-primary');
+                delete studentForm.dataset.editingId; // Clear the editing ID
+
+                // If a new student was inserted, ensure the form is hidden and table shown
+                if (!editingId) {
+                    studentForm.style.display = 'none';
+                    document.querySelector('.card:last-of-type').style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('خطأ في إرسال النموذج:', error);
+                showAlert(`فشل في إرسال البيانات: ${error.message}`, 'danger');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // التحقق من صحة البيانات
+        function validateStudentData(student) {
+            if (!student.name || student.name.trim() === '') {
+                showAlert('يرجى إدخال الاسم', 'danger');
+                return false;
+            }
+            
+            if (!student.college) {
+                showAlert('يرجى اختيار الكلية', 'danger');
+                return false;
+            }
+            
+            if (!student.department) {
+                showAlert('يرجى اختيار القسم', 'danger');
+                return false;
+            }
+            
+            if (!student.grade) {
+                showAlert('يرجى اختيار الفرقة', 'danger');
+                return false;
+            }
+            
+            if (isNaN(student.gpa)) {
+                showAlert('يرجى إدخال معدل تراكمي صحيح', 'danger');
+                return false;
+            }
+            
+            if (student.gpa < 0 || student.gpa > 4) {
+                showAlert('المعدل التراكمي يجب أن يكون بين 0 و 4', 'danger');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // تحديث الجدول
+        async function refreshTable() {
+            try {
+                showLoading(true);
+                studentsTable.innerHTML = '';
+                console.log('جاري تحديث الجدول...');
+                
+                const { data: students, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .order('gpa', { ascending: false });
+                if (error) {
+                    console.error('خطأ في جلب البيانات:', error);
+                    throw error;
+                }
+                
+                console.log('البيانات المستلمة:', students);
+                if (!students || students.length === 0) {
+                    studentsTable.innerHTML = '<tr><td colspan="8" class="text-center">لا توجد بيانات</td></tr>'; // Increased colspan to 8
+                    return;
+                }
+                
+                students.forEach((student, index) => {
+                    const row = studentsTable.insertRow();
+                    
+                    if 
+                    (currentStudentId && currentStudentId === generateStudentId(student)) {
+                        row.innerHTML = `
+                            <td class="rank-cell">${index + 1}</td>
+                            <td>${formatDate(student.created_at)}</td>
+                            <td>${student.name}</td>
+                            <td>${student.college}</td>
+                            <td>${student.department}</td>
+                            <td>${student.grade}</td>
+                            <td class="gpa-cell + highlight-row" style="color: ${getGpaColor(student.gpa)}">${student.gpa.toFixed(2)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning edit-btn" data-id="${student.id}">تعديل</button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">حذف</button>
+                            </td>
+                        `;
+                    } else {
+                        row.innerHTML = `
+                            <td class="rank-cell">${index + 1}</td>
+                            <td>${formatDate(student.created_at)}</td>
+                            <td>${student.name}</td>
+                            <td>${student.college}</td>
+                            <td>${student.department}</td>
+                            <td>${student.grade}</td>
+                            <td class="gpa-cell" style="color: ${getGpaColor(student.gpa)}">${student.gpa.toFixed(2)}</td>
+                            <td></td> `;
+                    }
+                });
+
+                // Add event listeners for edit and delete buttons after table is populated
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', handleEdit);
+                });
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', handleDelete);
+                });
+
+            } catch (error) {
+                console.error('خطأ في تحديث الجدول:', error);
+                showAlert('حدث خطأ أثناء جلب البيانات', 'danger');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // تحديد لون GPA
+        function getGpaColor(gpa) {
+            if (gpa >= 3.5) return '#1cc88a';
+            if (gpa >= 2.5) return '#f6c23e';
+            return '#e74a3b';
+        }
+
+        // إنشاء معرف فريد للطالب
+        function generateStudentId(student) {
+            return `${student.name}-${student.college}-${student.department}-${student.grade}-${student.gpa}`;
+        }
+
+        // عرض تحميل
+        function showLoading(show) {
+            loadingSpinner.style.display = show ?
+            'block' : 'none';
+        }
+
+        // عرض تنبيه
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.role = 'alert';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            const container = document.querySelector('.container');
+            container.prepend(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // وظيفة التعديل
+        async function handleEdit(event) {
+            const studentId = event.target.dataset.id;
+            console.log('طلب تعديل الطالب ذو المعرف:', studentId);
+
+            try {
+                const { data, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('id', studentId)
+                    .single();
+
+                if (error) throw error;
+
+                // Populate the form with the student's data for editing
+                document.getElementById('name').value = data.name;
+                document.getElementById('college').value = data.college;
+                document.getElementById('department').value = data.department;
+                document.getElementById('grade').value = data.grade;
+                document.getElementById('gpa').value = data.gpa;
+
+                // Change the form submit button to an update button
+                const submitButton = studentForm.querySelector('button[type="submit"]');
+                submitButton.innerHTML = '<i class="fas fa-edit me-2"></i>تحديث البيانات';
+                submitButton.classList.remove('btn-primary');
+                submitButton.classList.add('btn-info');
+
+                // Store the studentId in a global variable or data attribute for the update operation
+                studentForm.dataset.editingId = studentId;
+
+                // Scroll to the top of the form for better UX
+                studentForm.scrollIntoView({ behavior: 'smooth' });
+
+                showAlert('يمكنك الآن تعديل بيانات الطالب.', 'info');
+                studentForm.style.display="block";
+                aa1.style.display="none";
+            } catch (error) {
+                console.error('خطأ في جلب بيانات الطالب للتعديل:', error);
+                showAlert('حدث خطأ أثناء جلب بيانات الطالب للتعديل.', 'danger');
+            }
+        }
+
+        // وظيفة الحذف
+        async function handleDelete(event) {
+            const studentId = event.target.dataset.id;
+            console.log('طلب حذف الطالب ذو المعرف:', studentId);
+
+            if (!confirm('هل أنت متأكد أنك تريد حذف هذا الطالب؟')) {
+                return;
+            }
+
+            try {
+                showLoading(true);
+                // Delete from Supabase
+                const { error: supabaseError } = await supabase
+                    .from('students')
+                    .delete()
+                    .eq('id', studentId);
+
+                if (supabaseError) throw supabaseError;
+
+                // If the deleted student is the current logged-in student, remove from local storage
+                const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (localData) {
+                    const student = JSON.parse(localData);
+                    // Generate ID for the student from local storage to compare with currentStudentId
+                    if (generateStudentId(student) === currentStudentId) {
+                        localStorage.removeItem(LOCAL_STORAGE_KEY);
+                        currentStudentId = null;
+                        // If deleted student was the registered one, show the registration form again
+                        studentForm.style.display = 'block';
+                        document.querySelector('.card:last-of-type').style.display = 'none'; // Hide the table
+                    }
+                }
+                
+                showAlert('تم حذف البيانات بنجاح!', 'success');
+                await refreshTable();
+            } catch (error) {
+                console.error('خطأ في حذف البيانات:', error);
+                showAlert(`فشل في حذف البيانات: ${error.message}`, 'danger');
+            } finally {
+                showLoading(false);
+            }
+        }
+    </script>
+</body>
+</html>
