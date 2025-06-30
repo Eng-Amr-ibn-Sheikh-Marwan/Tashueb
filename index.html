@@ -69,12 +69,12 @@
         }
         
         .highlight-row {
-            position: relative;
+            position: ;
         }
         
         .highlight-row::after {
             content: "أنت";
-            position: absolute;
+            position: ;
             left: 10px;
             top: 50%;
             transform: translateY(-50%);
@@ -94,7 +94,101 @@
         .gpa-cell {
             font-weight: bold;
         }
-
+    
+    .gpa-cell {
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 12px;
+        border-radius: 0 5px 5px 0;
+        color: white !important;
+    }
+    .grade-cell {
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 12px;
+        border-radius: 5px 0 0 5px;
+        color: white !important;
+    }
+    .gpa-Aplus {
+        background-color: #1cc88a !important;
+        color: white !important;
+    }
+    
+    .gpa-A {
+        background-color: #1cc88a !important;
+        color: white !important;
+    }
+    
+    .gpa-Bplus {
+        background-color: #36b9cc !important;
+        color: white !important;
+    }
+    
+    .gpa-B {
+        background-color: #36b9cc !important;
+        color: white !important;
+    }
+    
+    .gpa-Cplus {
+        background-color: #f6c23e !important;
+        color: white !important;
+    }
+    
+    .gpa-C {
+        background-color: #f6c23e !important;
+        color: white !important;
+    }
+    
+    .gpa-D {
+        background-color: #e74a3b !important;
+        color: white !important;
+    }
+    
+    .gpa-F {
+        background-color: #e74a3b !important;
+        font-weight: bolder;
+    }
+    
+    .grade-Aplus {
+        background-color: #1cc88a !important;
+        color: white !important;
+    }
+    
+    .grade-A {
+        background-color: #1cc88a !important;
+        color: white !important;
+    }
+    
+    .grade-Bplus {
+        background-color: #36b9cc !important;
+        color: white !important;
+    }
+    
+    .grade-B {
+        background-color: #36b9cc !important;
+        color: white !important;
+    }
+    
+    .grade-Cplus {
+        background-color: #f6c23e !important;
+        color: #000 !important;
+    }
+    
+    .grade-C {
+        background-color: #f6c23e !important;
+        color: #000 !important;
+    }
+    
+    .grade-D {
+        background-color: #e74a3b !important;
+        color: white !important;
+    }
+    
+    .grade-F {
+        background-color: #e74a3b !important;
+        color: white !important;
+        font-weight: bolder;
+    }
         .loading-spinner {
             display: none;
             text-align: center;
@@ -146,18 +240,59 @@
             cursor: pointer;
         }
 
+        /* التعديلات الجديدة للكارد */
+        .container {
+            max-width: 100%;
+            padding: 0;
+        }
+        
+        .row.justify-content-center {
+            margin: 0;
+        }
+        
+        .col-lg-8 {
+            max-width: 100%;
+            flex: 0 0 100%;
+            padding: 0;
+        }
+        
+        .card {
+            border-radius: 0;
+            margin: 0;
+        }
+        
+        /* تعديلات الجدول */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        #studentsTable {
+            width: 100% !important;
+            margin: 0;
+        }
+        
+        #studentsTable th, 
+        #studentsTable td {
+            white-space: nowrap;
+            padding: 12px 15px;
+        }
+        
+        /* تعديلات للعرض على الشاشات الصغيرة */
         @media (max-width: 768px) {
-            .table-responsive {
-                border-radius: 10px;
+            #studentsTable th, 
+            #studentsTable td {
+                padding: 8px 10px;
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container py-5">
+    <div class="container py-0">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card mb-4">
+                <div class="card mb-0">
                     <div class="card-header py-3 bg-white">
                         <h4 class="m-0 font-weight-bold text-primary text-center">
                             <i class="fas fa-user-graduate me-2"></i>نظام تسجيل بيانات الطلاب
@@ -207,7 +342,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="gpa" class="form-label">المعدل التراكمي (GPA)</label>
-                                    <input type="number" class="form-control" id="gpa" min="0" max="4" step="0.01" required>
+                                    <input type="number" class="form-control" id="gpa" min="0" max="4" step="0.001" required>
                                     <div class="invalid-feedback">يرجى إدخال معدل تراكمي صحيح (0-4)</div>
                                 </div>
                             </div>
@@ -221,39 +356,41 @@
                     </div>
                 </div>
                 
-                <div class="card" id="aa1" style="display:none;">
-                    <div class="card-header py-3 bg-white">
-                        <h4 class="m-0 font-weight-bold text-primary text-center">
-                            <i class="fas fa-table me-2"></i>بيانات الطلاب
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="loading-spinner" id="loadingSpinner">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">جاري التحميل...</span>
-                            </div>
-                            <p class="mt-2">جاري تحميل البيانات...</p>
-                        </div>
-                        
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="studentsTable">
-                                <thead>
-                                    <tr>
-                                        <th width="10%">الترتيب</th>
-                                        <th width="10%">التاريخ</th>
-                                        <th width="20%">الاسم</th>
-                                        <th width="10%">الكلية</th>
-                                        <th width="20%">القسم</th>
-                                        <th width="10%">الفرقة</th>
-                                        <th width="20%">المعدل</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+    <div class="card" id="aa1" style="display:none;">
+        <div class="card-header py-3 bg-white">
+            <h4 class="m-0 font-weight-bold text-primary text-center">
+                <i class="fas fa-table me-2"></i>بيانات الطلاب
+            </h4>
+        </div>
+        <div class="card-body p-0"> <!-- تعديل هنا لإزالة padding -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">جاري التحميل...</span>
                 </div>
+                <p class="mt-2">جاري تحميل البيانات...</p>
+            </div>
+            
+            <div class="table-responsive m-0"> <!-- تعديل هنا لإزالة margin -->
+                <table class="table table-hover m-0" id="studentsTable"> <!-- تعديل هنا لإزالة margin -->
+                    <thead>
+                        <tr>
+                            <th>الترتيب</th>
+                            <th>التاريخ</th>
+                            <th>الاسم</th>
+                            <th>الكلية</th>
+                            <th>القسم</th>
+                            <th>الفرقة</th>
+                            <th>GPA</th>
+                            <th>التقدير</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
             </div>
         </div>
     </div>
@@ -299,7 +436,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="modalGpa" class="form-label">المعدل التراكمي (GPA)</label>
-                        <input type="number" class="form-control" id="modalGpa" min="0" max="4" step="0.01" required>
+                        <input type="number" class="form-control" id="modalGpa" min="0" max="4" step="0.001" required>
                     </div>
                 </div>
                 <div class="text-center mt-4">
@@ -562,6 +699,26 @@
                 showLoading(false);
             }
         }
+function getGpaClass(gpa) {
+    if (gpa == 4.000) return 'gpa-Aplus';
+    if (gpa >= 3.667) return 'gpa-A';
+    if (gpa >= 3.333) return 'gpa-Bplus';
+    if (gpa >= 3.000) return 'gpa-B';
+    if (gpa >= 2.667) return 'gpa-Cplus';
+    if (gpa >= 2.333) return 'gpa-C';
+    if (gpa >= 2.000) return 'gpa-D';
+    return 'gpa-F';
+}
+function getGrade(gpa) {
+    if (gpa == 4.000) return { grade: 'امتياز مرتفع A+', class: 'grade-Aplus' };
+    if (gpa >= 3.667) return { grade: 'امتياز A', class: 'grade-A' };
+    if (gpa >= 3.333) return { grade: 'جيد جدًا مرتفع B+', class: 'grade-Bplus' };
+    if (gpa >= 3.000) return { grade: 'جيد جدًا B', class: 'grade-B' };
+    if (gpa >= 2.667) return { grade: 'جيد مرتفع C+', class: 'grade-Cplus' };
+    if (gpa >= 2.333) return { grade: 'جيد C', class: 'grade-C' };
+    if (gpa >= 2.000) return { grade: 'مقبول D', class: 'grade-D' };
+    return { grade: 'راسب F', class: 'grade-F' };
+}
 
         async function refreshTable() {
             try {
@@ -576,7 +733,7 @@
                 if (error) throw error;
                 
                 if (!students || students.length === 0) {
-                    studentsTable.innerHTML = '<tr><td colspan="8" class="text-center">لا توجد بيانات</td></tr>';
+                    studentsTable.innerHTML = '<tr><td colspan="9" class="text-center">لا توجد بيانات</td></tr>';
                     return;
                 }
                 
@@ -586,6 +743,7 @@
                 
                 for (let i = 0; i < students.length; i++) {
                     const student = students[i];
+                    const gradeInfo = getGrade(student.gpa);
                     
                     if (previousGpa !== null && student.gpa !== previousGpa) {
                         rank = sameRankCount;
@@ -594,21 +752,22 @@
                     const row = studentsTable.insertRow();
                     const isCurrentStudent = currentStudentId && currentStudentId === generateStudentId(student);
                     
-                    row.innerHTML = `
-                        <td class="rank-cell">${rank}</td>
-                        <td>${formatDate(student.updated_at || student.created_at)}</td>
-                        <td>${student.name}</td>
-                        <td>${student.college}</td>
-                        <td>${student.department}</td>
-                        <td>${student.grade}</td>
-                        <td class="gpa-cell ${isCurrentStudent ? 'highlight-row' : ''}" style="color: ${getGpaColor(student.gpa)}">${student.gpa.toFixed(2)}</td>
-                        <td>
-                            ${isCurrentStudent ? `
-                            <button class="btn btn-sm btn-warning edit-btn" data-id="${student.id}">تعديل</button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">حذف</button>
-                            ` : ''}
-                        </td>
-                    `;
+row.innerHTML = `
+    <td class="rank-cell">${rank}</td>
+    <td>${formatDate(student.updated_at || student.created_at)}</td>
+    <td>${student.name}</td>
+    <td>${student.college}</td>
+    <td>${student.department}</td>
+    <td>${student.grade}</td>
+    <td class="gpa-cell ${getGpaClass(student.gpa)}">${student.gpa.toFixed(3)}</td>
+    <td class="grade-cell ${gradeInfo.class}">${gradeInfo.grade}</td>
+    <td>
+        ${isCurrentStudent ? `
+        <button class="btn btn-sm btn-warning edit-btn" data-id="${student.id}">تعديل</button>
+        <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">حذف</button>
+        ` : ''}
+    </td>
+`;
                     
                     previousGpa = student.gpa;
                     sameRankCount++;
